@@ -17,7 +17,7 @@
 # Please file any issues or PRs at https://github.com/gocd/docker-gocd-agent
 ###############################################################################################
 
-FROM opensuse:tumbleweed
+FROM registry.opensuse.org/opensuse/tumbleweed
 MAINTAINER GoCD <go-cd-dev@googlegroups.com>
 
 LABEL gocd.version="19.1.0" \
@@ -49,8 +49,10 @@ RUN \
   groupadd -g ${GID} go && \ 
   cat /etc/os-release && \
   useradd -u ${UID} -g go -d /home/go -m go && \
-  zypper ref && \
-  zypper -n install git-core subversion mercurial openssh bash unzip curl glibc-locale-base java-1_8_0-openjdk-headless && \
+  zypper -n ar -r http://download.suse.de/ibs/SUSE:/CA/openSUSE_Tumbleweed/SUSE:CA.repo && \
+  zypper -n ar --no-gpgcheck -r http://download.opensuse.org/repositories/openSUSE:/Tools/openSUSE_Factory/openSUSE:Tools.repo && \
+  zypper -n ref && \
+  zypper -n install git-core subversion mercurial openssh bash unzip curl ca-certificates-suse glibc-locale-base java-1_8_0-openjdk-headless && \
   zypper -n install openSUSE-release-tools-repo-checker openSUSE-release-tools-pkglistgen && \
 # download the zip file
   curl --fail --location --silent --show-error "https://download.gocd.org/binaries/19.1.0-8469/generic/go-agent-19.1.0-8469.zip" > /tmp/go-agent.zip && \
